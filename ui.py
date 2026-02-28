@@ -1,4 +1,4 @@
-# NXFORGE 2026 nx.messenger v0.1beta
+# 2026 NXFORGE nx.messenger v0.1
 
 import flet as ft
 import asyncio
@@ -6,13 +6,12 @@ import asyncio
 
 # Main Program
 def main(page: ft.Page):
-
-    # Page Changer and Poper
     async def view_pop(e):
         if e.view is not None:
             page.views.remove(e.view)
             top_view = page.views[-1]
             await page.push_route(top_view.route)
+
 
     def route_change():
         page.views.clear()
@@ -25,11 +24,17 @@ def main(page: ft.Page):
         page.update()
 
 
+    def show_indev():
+        page.show_dialog(ft.SnackBar(ft.Text("It's in development!")))
+
+
     # Page
     page.on_route_change = route_change
     page.on_view_pop = view_pop
-    page.title = "NXMessenger"
+    page.title = "NXMessenger - NXFORGE"
     page.window.icon = "C:\\Users\\sachu\\Documents\\NXMessanger\\icons\\icon_light.ico"
+    page.window.min_height = 400
+    page.window.min_width = 300
 
 
     # Home Page
@@ -39,6 +44,7 @@ def main(page: ft.Page):
                 await e.control.confirm_dismiss(True)
             else:
                 await e.control.confirm_dismiss(False)
+                show_indev()
 
 
         def gen_elements_chats(DictChats: dict):
@@ -57,7 +63,8 @@ def main(page: ft.Page):
                     ft.ListTile(
                         title=name,
                         subtitle=ip,
-                        bgcolor=ft.Colors.SURFACE_CONTAINER_LOW
+                        bgcolor=ft.Colors.SURFACE_CONTAINER_LOW,
+                        mouse_cursor=ft.MouseCursor.CLICK
                     ),
                     padding=ft.Padding.all(10),
                     on_click=lambda: asyncio.create_task(page.push_route(f"/chat/{name}/{ip}"))
@@ -89,7 +96,7 @@ def main(page: ft.Page):
             )
         ]
 
-        view.floating_action_button = ft.FloatingActionButton(icon=ft.Icons.ADD)
+        view.floating_action_button = ft.FloatingActionButton(icon=ft.Icons.ADD, on_click=show_indev)
 
         return view
     
@@ -120,8 +127,8 @@ def main(page: ft.Page):
             ),
             actions_padding=8,
             actions=[
-                ft.IconButton(ft.Icons.SEARCH),
-                ft.IconButton(ft.Icons.MORE_VERT),
+                ft.IconButton(ft.Icons.SEARCH, on_click=show_indev),
+                ft.IconButton(ft.Icons.MORE_VERT, on_click=show_indev),
             ],
             bgcolor=ft.Colors.SURFACE_CONTAINER,
         )
@@ -143,7 +150,7 @@ def main(page: ft.Page):
                         color=ft.Colors.GREY_400
                     ),
                     content_padding=0,
-                    trailing=ft.IconButton(ft.Icons.MORE_VERT_ROUNDED),
+                    trailing=ft.IconButton(ft.Icons.MORE_VERT_ROUNDED, on_click=show_indev),
                 ),
                 padding=ft.Padding.only(left=16, top=8, right=16, bottom=8),
             )
@@ -159,7 +166,7 @@ def main(page: ft.Page):
                         ft.Container(
                             ft.Row([
                                 ft.TextField(expand=True, border_color=ft.Colors.TRANSPARENT, bgcolor=ft.Colors.SURFACE_CONTAINER_HIGH, border_radius=8, label="Message", text_vertical_align=ft.VerticalAlignment.CENTER),
-                                ft.IconButton(ft.Icons.SEND_ROUNDED),
+                                ft.IconButton(ft.Icons.SEND_ROUNDED, on_click=show_indev),
                             ], expand=True),
                             expand=True,
                             padding=ft.Padding.all(8),
