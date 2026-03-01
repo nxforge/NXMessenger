@@ -2,7 +2,9 @@
 
 import flet as ft
 import asyncio
+import data
 
+data.init()
 
 # Main Program
 def main(page: ft.Page):
@@ -10,7 +12,7 @@ def main(page: ft.Page):
         if e.view is not None:
             page.views.remove(e.view)
             top_view = page.views[-1]
-            await page.push_route(top_view.route)
+            await page.push_route(str(top_view.route))
 
 
     def route_change():
@@ -31,8 +33,8 @@ def main(page: ft.Page):
     # Page
     page.on_route_change = route_change
     page.on_view_pop = view_pop
-    page.title = "NXMessenger - NXFORGE"
-    page.window.icon = "C:\\Users\\sachu\\Documents\\NXMessanger\\icons\\icon_light.ico"
+    page.title = "NXMessenger"
+    page.window.icon = data.abspath("icons\\icon_light.ico")
     page.window.min_height = 400
     page.window.min_width = 300
 
@@ -42,22 +44,47 @@ def main(page: ft.Page):
         async def handle_confirm_dismiss(e: ft.DismissibleDismissEvent):
             if e.direction == ft.DismissDirection.END_TO_START:
                 await e.control.confirm_dismiss(True)
+                DataChats.remove(e.control.key)
             else:
                 await e.control.confirm_dismiss(False)
                 show_indev()
 
 
-        def gen_elements_chats(DictChats: dict):
-            ListChat = list()
+        def update_elements_chats() -> None:
+            ListChats = DataChats.load()
+            ElementChats = list()
 
-            for chat in DictChats.items():
-                ListChat.append(CardChat(chat[0], chat[1]))
+            for i, chat in enumerate(ListChats):
+                ElementChats.append(CardChat(i, chat.get("name"), chat.get("ip")))
 
-            return ListChat
+            ListChat.controls = ElementChats
+
+            page.update()
         
+
+        def dialog_add_chat_add():
+            ip = DialogTextIP.value + ":" + DialogTextPort.value
+            DataChats.add({"name": "Name", "ip": ip})
+
+            page.pop_dialog()
+            
+            update_elements_chats()
+
+
+        DataChats = data.DataBaseChats()
+
         view = ft.View(route=route)
 
-        CardChat = lambda name, ip: ft.Dismissible(
+        DialogTextIP = ft.TextField(border_color=ft.Colors.GREY, label="IP address", width=200)
+        DialogTextPort = ft.TextField(border_color=ft.Colors.GREY, label="Port", width=80)
+        DialogAddChat = lambda: ft.AlertDialog(
+            title=ft.Text("Adding a chat:"),
+            content=ft.Row([DialogTextIP, DialogTextPort]),
+            actions=[ft.TextButton("Cancel", on_click=lambda e: page.pop_dialog()), ft.TextButton("Add", on_click=dialog_add_chat_add)],
+            modal=True,
+        )
+
+        CardChat = lambda id, name, ip: ft.Dismissible(
             ft.Card(
                 ft.Container(
                     ft.ListTile(
@@ -78,6 +105,7 @@ def main(page: ft.Page):
                 ft.DismissDirection.START_TO_END: 0.2,
             },
             on_confirm_dismiss=handle_confirm_dismiss,
+            key=id
         )
 
         view.appbar = ft.AppBar(
@@ -85,9 +113,10 @@ def main(page: ft.Page):
             bgcolor=ft.Colors.SURFACE_CONTAINER,
         )
 
-        ListChat = ft.ListView(
-            controls=gen_elements_chats({"Chat 1": "1.1.1.1", "Chat 2": "1.0.1.0", "Chat 3": "1.1.1.1", "Chat 4": "1.0.1.0", "Chat 5": "1.1.1.1", "Chat 6": "1.0.1.0", "Chat 7": "1.1.1.1", "Chat 8": "1.0.1.0",})
-        )
+        ListChat = ft.ListView()
+
+        update_elements_chats()
+
         view.controls = [
             ft.Column([
                     ft.Container(ListChat, expand=True)
@@ -96,7 +125,7 @@ def main(page: ft.Page):
             )
         ]
 
-        view.floating_action_button = ft.FloatingActionButton(icon=ft.Icons.ADD, on_click=show_indev)
+        view.floating_action_button = ft.FloatingActionButton(icon=ft.Icons.ADD, on_click=lambda: page.show_dialog(DialogAddChat()))
 
         return view
     
