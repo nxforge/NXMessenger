@@ -56,7 +56,3 @@ class DataBaseChats:
         with open(path, "w") as f:
             json.dump(data, f)
 
-
-if __name__ == "__main__":
-    init()
-    DataBaseChats().clear()
