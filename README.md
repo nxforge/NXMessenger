@@ -21,6 +21,8 @@
 ### &nbsp; 🎨 The UI is beautiful and minimalistic!
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Because it is made using [flet](https://flet.dev).
 
+---
+
 <h2 align="center">
 
 **Thanks for reading!**
