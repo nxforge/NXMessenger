@@ -12,14 +12,13 @@
 
 </h2>
 
-### &nbsp; 🚀 NXMessenger is faster than traditional messengers!
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Built with Python.
+### &nbsp; 📄 When copying code you must comply with the [MPL-2.0 license](https://github.com/nxforge/NXMessenger/blob/main/LICENSE)!
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Everything in this branch is subject to a [license](https://github.com/nxforge/NXMessenger/blob/main/LICENSE).
 
-### &nbsp; 🔒 NXMessenger is secure!
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Communication via LAN or P2P VPN.
+### &nbsp; ❌ All code in this barnch may contain bugs and omissions!
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; If you find any bugs, report them to [issues](https://github.com/nxforge/NXMessenger/issues).
 
-### &nbsp; 🎨 The UI is beautiful and minimalistic!
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Because it is made using [flet](https://flet.dev).
+---
 
 <h2 align="center">
 
